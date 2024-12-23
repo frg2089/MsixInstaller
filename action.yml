@@ -1,0 +1,34 @@
+name: MSIX Wrapper
+description: 使用 .Net Framework 包装软件包
+author: frg2089
+inputs:
+  msix:
+    description: MSIX 安装包的路径
+    required: true
+  arch:
+    description: 安装包架构 (neutral|x86|x64|arm|arm64)
+    required: false
+  version:
+    description: 安装包版本
+    required: false
+
+outputs:
+  path:
+    description: Installer Path
+    value: ${{ steps.Pack-MsixInstaller.outputs.path }}
+  algorithm:
+    description: Installer Checksum Algorithm
+    value: ${{ steps.Pack-MsixInstaller.outputs.algorithm }}
+  checksum:
+    description: Installer Checksum Value
+    value: ${{ steps.Pack-MsixInstaller.outputs.checksum }}
+
+runs:
+  using: composite
+  steps:
+    - id: Pack-MsixInstaller
+      shell: pwsh
+      env: 
+        MSIX_Version: ${{ inputs.version }}
+        MSIX_Arch: ${{ inputs.arch }}
+      run: ${{ github.action_path }}\scripts\Pack-MsixInstaller.ps1 -Path ${{ inputs.msix }}

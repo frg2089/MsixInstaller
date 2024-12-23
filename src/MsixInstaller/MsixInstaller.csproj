@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <NeutralLanguage>zh-Hans</NeutralLanguage>
+    <MsixFilePath Condition=" '$(MsixFilePath)' == '' ">$(MSBuildThisFileDirectory)..\..\source.msix</MsixFilePath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="$(MsixFilePath)" Link="source.msix" LogicalName="msix" />
+  </ItemGroup>
+
+</Project>
