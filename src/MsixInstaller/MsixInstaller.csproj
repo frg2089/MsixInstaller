@@ -3,16 +3,30 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net48</TargetFramework>
-    <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <LangVersion>12</LangVersion>
+    <EnableDefaultApplicationDefinition>False</EnableDefaultApplicationDefinition>
     <NeutralLanguage>zh-Hans</NeutralLanguage>
     <MsixFilePath Condition=" '$(MsixFilePath)' == '' ">$(MSBuildThisFileDirectory)..\..\source.msix</MsixFilePath>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="Costura.Fody" Version="6.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="WPF-UI" Version="4.0.3" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <EmbeddedResource Include="$(MsixFilePath)" Link="source.msix" LogicalName="msix" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Reference Include="System.IO.Compression" />
   </ItemGroup>
 
 </Project>
