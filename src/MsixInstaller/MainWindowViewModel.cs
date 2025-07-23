@@ -10,6 +10,8 @@ using System.Xml;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
+using MsixInstaller.Resources;
+
 namespace MsixInstaller;
 
 public sealed partial class MainWindowViewModel : ObservableObject
@@ -34,9 +36,10 @@ public sealed partial class MainWindowViewModel : ObservableObject
     public MainWindowViewModel(MainWindow view, string path, X509Certificate2 cert)
     {
         _view = view;
-        Path = path;
-        Subject = cert.Subject;
-        Publisher = Subject.Split(',').Select(i => i.Split('=')).Where(i => i?.Length is 2).ToDictionary(i => i[0], i => i[1])["CN"];
+        var publisher = cert.Subject.Split(',')
+            .Select(i => i.Split('='))
+            .Where(i => i?.Length is 2)
+            .ToDictionary(i => i[0], i => i[1])["CN"];
 
         using var zip = ZipFile.OpenRead(path);
         var manifest = zip.GetEntry("AppxManifest.xml") ?? throw new Exception("AppxManifest.xml not found");
@@ -44,13 +47,21 @@ public sealed partial class MainWindowViewModel : ObservableObject
         XmlDocument doc = new();
         doc.Load(fs);
         var identity = doc.GetElementsByTagName("Identity").Item(0) as XmlElement;
-        Version = identity?.GetAttribute("Version") ?? "1.0.0.0";
+
+        var version = identity?.GetAttribute("Version") ?? "1.0.0.0";
 
         var properties = doc.GetElementsByTagName("Properties").Item(0)?.ChildNodes.OfType<XmlElement>();
-        Title = properties
+        var packageName = properties
             .FirstOrDefault(i => i is { LocalName: "DisplayName", NamespaceURI: "http://schemas.microsoft.com/appx/manifest/foundation/windows10" })
             ?.InnerText
-            .Trim() ?? "未知的软件包";
+            .Trim() ?? Resource.UnknownPackage;
+
+        Title = string.Format(Resource.TitleTemplate, packageName);
+        Publisher = string.Format(Resource.PublisherTemplate, publisher);
+        Version = string.Format(Resource.VersionTemplate, version);
+        Path = string.Format(Resource.FilePathTemplate, path);
+        Subject = string.Format(Resource.WarningTemplate, cert.Subject);
+
 
         var logo = zip.Entries.Where(i => i.FullName.StartsWith("Images/StoreLogo")).Reverse().FirstOrDefault();
 

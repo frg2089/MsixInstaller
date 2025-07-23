@@ -8,25 +8,37 @@
     <UseWPF>true</UseWPF>
     <LangVersion>12</LangVersion>
     <EnableDefaultApplicationDefinition>False</EnableDefaultApplicationDefinition>
-    <NeutralLanguage>zh-Hans</NeutralLanguage>
     <MsixFilePath Condition=" '$(MsixFilePath)' == '' ">$(MSBuildThisFileDirectory)..\..\source.msix</MsixFilePath>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-    <PackageReference Include="Costura.Fody" Version="6.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="Costura.Fody" Version="6.0.0" PrivateAssets="All" />
+    <PackageReference Include="Resource.Embedder" Version="2.2.0" />
     <PackageReference Include="WPF-UI" Version="4.0.3" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <EmbeddedResource Include="$(MsixFilePath)" Link="source.msix" LogicalName="msix" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Reference Include="System.IO.Compression" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Resource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Resource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
