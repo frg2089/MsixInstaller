@@ -56,11 +56,11 @@ public sealed partial class MainWindowViewModel : ObservableObject
             ?.InnerText
             .Trim() ?? Resource.UnknownPackage;
 
-        Title = string.Format(Resource.TitleTemplate, packageName);
-        Publisher = string.Format(Resource.PublisherTemplate, publisher);
-        Version = string.Format(Resource.VersionTemplate, version);
-        Path = string.Format(Resource.FilePathTemplate, path);
-        Subject = string.Format(Resource.WarningTemplate, cert.Subject);
+        Title = Resource.FormatTitleTemplate(packageName);
+        Publisher = Resource.FormatPublisherTemplate(publisher);
+        Version = Resource.FormatVersionTemplate(version);
+        Path = Resource.FormatFilePathTemplate(path);
+        Subject = Resource.FormatWarningTemplate(cert.Subject);
 
 
         var logo = zip.Entries.Where(i => i.FullName.StartsWith("Images/StoreLogo")).Reverse().FirstOrDefault();
