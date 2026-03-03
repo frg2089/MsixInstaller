@@ -9,7 +9,10 @@ using namespace System.Xml;
 param (
   [Parameter(Mandatory)]
   [string]
-  $Path
+  $Path,
+  [Parameter(Mandatory)]
+  [string]
+  $Name
 )
 
 $Path = [Path]::GetFullPath($Path)
@@ -45,9 +48,10 @@ dotnet publish $Private:Root `
   -property:"MsixFilePath=$Path" `
   -property:"Version=$env:MSIX_Version" `
   -property:"FileVersion=$env:MSIX_Version" `
-  -property:"InformationalVersion=$env:MSIX_Version"
+  -property:"InformationalVersion=$env:MSIX_Version" `
+  -property:"AssemblyName=$Name"
 
-$Private:InstallerPath = Join-Path $Private:ArtifactsPath 'publish' 'MsixInstaller' "release_win-$($Private:Platforms[$env:MSIX_Arch])" 'MsixInstaller.exe'
+$Private:InstallerPath = Join-Path $Private:ArtifactsPath 'publish' 'MsixInstaller' "release_win-$($Private:Platforms[$env:MSIX_Arch])" "$Name.exe"
 $Private:InstallerPath = [Path]::GetFullPath($Private:InstallerPath)
 $Private:Hash = Get-FileHash -LiteralPath $Private:InstallerPath
 $Private:Algorithm = $Private:Hash.Algorithm

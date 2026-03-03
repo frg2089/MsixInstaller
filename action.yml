@@ -5,6 +5,9 @@ inputs:
   msix:
     description: MSIX 安装包的路径
     required: true
+  name:
+    description: 程序集名称
+    default: MsixInstaller
   arch:
     description: 安装包架构 (neutral|x86|x64|arm|arm64)
     required: false
@@ -33,4 +36,4 @@ runs:
       env: 
         MSIX_Version: ${{ inputs.version }}
         MSIX_Arch: ${{ inputs.arch }}
-      run: ${{ github.action_path }}\scripts\Pack-MsixInstaller.ps1 -Path ${{ inputs.msix }}
+      run: . '${{ github.action_path }}\scripts\Pack-MsixInstaller.ps1' -Path '${{ inputs.msix }}' -Name '${{ inputs.name }}'
