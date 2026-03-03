@@ -1,18 +1,18 @@
 name: MSIX Wrapper
-description: 使用 .Net Framework 包装软件包
+description: Package wrapper using .Net Framework
 author: frg2089
 inputs:
   msix:
-    description: MSIX 安装包的路径
+    description: Path to MSIX package
     required: true
   name:
-    description: 程序集名称
+    description: Assembly name
     default: MsixInstaller
   arch:
-    description: 安装包架构 (neutral|x86|x64|arm|arm64)
+    description: Package architecture (neutral|x86|x64|arm|arm64)
     required: false
   version:
-    description: 安装包版本
+    description: Package version
     required: false
 
 outputs:
@@ -29,7 +29,7 @@ outputs:
 runs:
   using: composite
   steps:
-    - uses: actions/setup-dotnet@v4
+    - uses: actions/setup-dotnet@v5
 
     - id: Pack-MsixInstaller
       shell: pwsh
